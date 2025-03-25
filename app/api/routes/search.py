@@ -12,7 +12,7 @@ async def search_qna(query: str, top_k: int = 5):
 
     qdrant_client = get_qdrant_client()
     
-    # Convert the query to a vector
+    # Converting the query to a vector
     query_vector = text_to_vector(query)
 
     try:
@@ -20,10 +20,10 @@ async def search_qna(query: str, top_k: int = 5):
         search_results = qdrant_client.search(
             collection_name=COLLECTION_NAME,
             query_vector=query_vector,
-            limit=top_k  # Retrieve top_k most relevant results
+            limit=top_k  # most relavent question and answers
         )
 
-        # Extract and format results
+        # Extract and formating the results
         results = [
             {
                 "question": i.payload["question"],

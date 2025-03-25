@@ -2,7 +2,7 @@ import docx
 import re
 import os
 
-# Function to extract questions and answers from the DOCX file
+# extract questions and answers from the DOCX file
 def extract_questions_and_answers(docx_path):
     if not os.path.exists(docx_path):
         print(f"The file '{docx_path}' does not exist.")
@@ -10,7 +10,7 @@ def extract_questions_and_answers(docx_path):
 
     doc = docx.Document(docx_path)
     
-    question_pattern = r'.*\?$'  # Matches lines ending with a question mark
+    question_pattern = r'.*\?$'  # finding the lines with '?' at the end
     
     questions = []
     answers = []
