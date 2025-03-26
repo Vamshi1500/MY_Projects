@@ -26,6 +26,7 @@ async def websocket_chat(websocket: WebSocket):
             
             response = ""
             if search_results:
+                # Format the results as plain text
                 for item in search_results:
                     question = item.payload["question"]
                     answer = item.payload["answer"]

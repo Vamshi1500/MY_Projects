@@ -10,7 +10,7 @@ from qdrant_client.models import PointStruct
 router = APIRouter()
 
 UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True) # ensures and cfeates a file uploads where data is stored
+os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure the upload directory exists
 
 @router.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
@@ -26,24 +26,24 @@ async def upload_file(file: UploadFile = File(...)):
 
     points = []
     for i, (question, answer) in enumerate(zip(questions, answers)):
-        # question and answer to vectors
+        # Convert both question and answer to vectors
         question_vector = text_to_vector(question)
         answer_vector = text_to_vector(answer)
 
-        # Combining question and answer vector to get a unified vector of data
+        # Combine question and answer vector (or you could just use one of them)
         combined_vector = np.mean([question_vector, answer_vector], axis=0).tolist()
 
-        # Create a PointStructure for each pair with consistant of a unique id
+        # Create a PointStruct for each pair (with a unique ID)
         point = PointStruct(
-            id=i + 1,  
-            vector=combined_vector,  # Combined vector for question and answer (mean)
-            payload={"question": question, "answer": answer}  # Metadata consisting question and answer
+            id=i + 1,  # Unique ID for each QA pair
+            vector=combined_vector,  # Combined vector for question and answer
+            payload={"question": question, "answer": answer}  # Metadata: question and answer
         )
         points.append(point)
     
     try:
-        # upsert(append) the points into Qdrant collection
+        # Upsert the points into Qdrant collection
         client.upsert(collection_name="qa9_collection", points=points)
-        return {"message":f"Successfully inserted {len(points)} faqs."}
+        return {"message":f"Successfully inserted {len(points)} question-answer pairs into Qdrant."}
     except Exception as e:
-        return {"message":f"Error upserting to Qdrant: {e}"}
+        return {"message":f"Error upserting into Qdrant: {e}"}
